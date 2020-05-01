@@ -11,6 +11,8 @@ Optionally, you can clone this project by running `git clone https://github.com/
 
 Only a select number of features from the API are implemented here as of now. They are described below.
 
+If you want any additional features implemented, feel free to open an issue.
+
 Data is returned as a [Pandas](https://pandas.pydata.org/) dataframe by default. The wrapper can also be configured to simply return raw json data.
 
 ### Examples
