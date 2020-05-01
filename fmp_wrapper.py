@@ -49,7 +49,7 @@ class FmpWrapper:
 
     def financials(self, ticker: str,
                    type: str,
-                   period="annual") -> Dict[str, Any]:
+                   period: str = "annual") -> Dict[str, Any]:
         """
         Retrieve a company's financial statements.
 
