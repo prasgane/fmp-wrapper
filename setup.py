@@ -8,7 +8,7 @@ URL = 'https://github.com/cccdenhart/fmp-wrapper'
 EMAIL = 'cccdenhart@me.com'
 AUTHOR = 'Charlie Denhart'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.1.0'
+VERSION = '0.1.4'
 proj_dir = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(proj_dir, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
@@ -28,7 +28,7 @@ setup(
     install_requires=REQUIRED,
     python_requires=REQUIRES_PYTHON,
     version=VERSION,
-    packages=["src"],
+    py_modules=['fmp_wrapper'],
     url=URL,
     license='MIT'
 )

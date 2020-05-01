@@ -6,16 +6,16 @@ from typing import Dict, Any, List, Optional, Union
 import pandas as pd
 
 
-def url_to_dict(url: str) -> Dict[str, Any]:
+def extract_url(url: str) -> Dict[str, Any]:
     """Utility to retrieve json from a url and convert to dict."""
     resp = request.urlopen(url)
     data = resp.read().decode("utf-8")
     json_data = json.loads(data)
-    return dict(json_data)
+    return json_data
 
 
 @dataclass
-class FinancialModelingPrep:
+class FmpWrapper:
     """A Python3 wrapper for the Financial Modeling Prep API."""
 
     api_version = "v3"
@@ -34,18 +34,18 @@ class FinancialModelingPrep:
     def profile(self, ticker: str) -> Dict[str, Any]:
         """Retrieve a company's profile."""
         url = os.path.join(self.base_url, "company", "profile", ticker)
-        dict_repr = url_to_dict(url)
+        raw_data = extract_url(url)
         if self.as_pandas:
-            return pd.DataFrame(dict_repr)
-        return dict_repr
+            return pd.DataFrame(raw_data)
+        return raw_data
 
     def quote(self, tickers: List[str]) -> List[Dict[str, Any]]:
         """Retreive quotes for any number of stock tickers."""
-        url = os.path.join(self.base_url, "quote", *tickers)
-        dict_repr = url_to_dict(url)
+        url = os.path.join(self.base_url, "quote", ",".join(tickers))
+        raw_data = extract_url(url)
         if self.as_pandas:
-            return pd.DataFrame(dict_repr)
-        return dict_repr
+            return pd.DataFrame(raw_data)
+        return raw_data
 
     def financials(self, ticker: str,
                    type: str,
@@ -63,10 +63,10 @@ class FinancialModelingPrep:
             query = ticker + "?period=" + period
             url = os.path.join(self.base_url, "financials", type_map.get(type),
                                query)
-            dict_repr = url_to_dict(url)
+            raw_data = extract_url(url)
             if self.as_pandas:
-                return pd.DataFrame(dict_repr["financials"])
-            return dict_repr
+                return pd.DataFrame(raw_data["financials"])
+            return raw_data
         else:
             raise ValueError(f"Type '{type}' is invalid.  Use one of:\
                              {type_map.keys}")
@@ -75,7 +75,7 @@ class FinancialModelingPrep:
                                                   pd.DataFrame]:
         """Retrieve daily price data."""
         url = os.path.join(self.base_url, "historical-price-full", ticker)
-        dict_repr = url_to_dict(url)
+        raw_data = extract_url(url)
         if self.as_pandas:
-            return pd.DataFrame(dict_repr)
-        return dict_repr
+            return pd.DataFrame(raw_data["historical"])
+        return raw_data

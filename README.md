@@ -11,5 +11,30 @@ Optionally, you can clone this project by running `git clone https://github.com/
 
 Only a select number of features from the API are implemented here as of now. They are described below.
 
-### Stock Profile
+### Examples
+**Import wrapper**
+
+```
+from fmp_wrapper import FmpWrapper
+fmp = FmpWrapper()
+```
+
+**Stock Portfolio**
+
+```
+aapl_portfolio = fmp.portfolio("AAPL")
+aapl_portfolio.head()
+```
+
+**Stock Quotes**
+
+```
+aapl_quote = fmp.quote("AAPL")
+aapl_quote.head()
+```
+
+**
+
+
+
 

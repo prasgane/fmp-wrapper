@@ -5,5 +5,5 @@ clean:
 build:
 	python3 setup.py sdist bdist_wheel
 
-dist:
+upload:
 	twine upload dist/*
