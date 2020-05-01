@@ -24,10 +24,10 @@ fmp = FmpWrapper()
 # OR fmp = FmpWrapper(as_pandas=False) for raw data returns
 ```
 
-**Stock Portfolio**
+**Stock Profile**
 
 ```
-aapl_portfolio = fmp.portfolio("AAPL")
+aapl_profile = fmp.profile("AAPL")
 ```
 
 **Stock Quotes**

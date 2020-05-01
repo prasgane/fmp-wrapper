@@ -5,3 +5,4 @@ dist/
 
 # cache files
 __pychache__/
+.mypy_cache/
