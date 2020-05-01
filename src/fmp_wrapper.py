@@ -2,7 +2,7 @@ import json
 from urllib import request
 import os
 from dataclasses import dataclass
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional, Union
 import pandas as pd
 
 
@@ -71,8 +71,8 @@ class FinancialModelingPrep:
             raise ValueError(f"Type '{type}' is invalid.  Use one of:\
                              {type_map.keys}")
 
-    def price_history(self, ticker: str) -> Optional[Dict[str, Any],
-            pd.DataFrame]]:
+    def price_history(self, ticker: str) -> Union[Dict[str, Any],
+                                                  pd.DataFrame]:
         """Retrieve daily price data."""
         url = os.path.join(self.base_url, "historical-price-full", ticker)
         dict_repr = url_to_dict(url)
