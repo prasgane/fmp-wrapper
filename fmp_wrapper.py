@@ -76,3 +76,60 @@ class FmpWrapper:
         raw_data = extract_url(url)
         def f(x: Json) -> Json: return x["historical"]
         return self.__route_return(raw_data, f)
+
+    def financial_ratios(self, tickers: List[str]) -> Union[Df, Json]:
+        """Retrieve Financial Ratios"""
+
+        url = os.path.join(self.base_url, "financial-ratios", ",".join(tickers))
+        raw_data = extract_url(url)
+        return self.__route_return(raw_data)
+
+    def enterprise_value(self, ticker: str,
+                         period: str = "annual") -> Union[Df, Json]:
+
+        query = ticker + "?period=" + period
+        url = os.path.join(self.base_url,  "enterprise-value", ticker, query)
+        raw_data = extract_url(url)
+        return self.__route_return(raw_data)
+
+    def key_metrics(self, ticker: str,
+                         period: str = "annual") -> Union[Df, Json]:
+
+        query = ticker + "?period=" + period
+        url = os.path.join(self.base_url, "company-key-metrics", ticker, query)
+        raw_data = extract_url(url)
+        return self.__route_return(raw_data)
+
+
+    def financial_growth(self, ticker: str,
+                         period: str = "annual") -> Union[Df, Json]:
+
+        query = ticker + "?period=" + period
+        url = os.path.join(self.base_url, "financial-statement-growth", ticker, query)
+        raw_data = extract_url(url)
+        return self.__route_return(raw_data)
+
+    def company_ratings(self, ticker: str) -> Union[Df, Json]:
+
+        url = os.path.join(self.base_url, "company/rating", ticker)
+        raw_data = extract_url(url)
+        return self.__route_return(raw_data)
+
+    def discounter_cash_flow(self, ticker: str, period: str = "annual", historical: bool = False):
+
+        if ~historical:
+            url = os.path.join(self.base_url, "discounted-cash-flow", ticker)
+            raw_data = extract_url(url)
+            return self.__route_return(raw_data)
+
+        query = ticker + "?period=" + period
+        url = os.path.join(self.base_url, "discounted-cash-flow", ticker, query)
+        raw_data = extract_url(url)
+        return self.__route_return(raw_data)
+
+
+
+
+
+
+
