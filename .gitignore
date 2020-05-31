@@ -2,7 +2,7 @@
 build/
 dist/
 *.egg-info
-
+fmp_key.txt
 # cache files
 __pychache__/
 .mypy_cache/

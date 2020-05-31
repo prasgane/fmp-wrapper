@@ -19,11 +19,13 @@ def extract_url(url: str) -> Json:
 
 
 @dataclass
-class FmpWrapper:
+class FmpWrapper():
     """A Python3 wrapper for the Financial Modeling Prep API."""
 
     api_version = "v3"
     api_url = "https://financialmodelingprep.com/api"
+    api_key = "?apikey=" + open(os.path.join(os.getcwd(), "fmp_key.txt"), 'r').read()
+
     base_url: str = os.path.join(api_url, api_version)
     as_pandas: bool = True
 
@@ -37,13 +39,13 @@ class FmpWrapper:
 
     def profile(self, ticker: str) -> Union[Df, Json]:
         """Retrieve a company's profile."""
-        url = os.path.join(self.base_url, "company", "profile", ticker)
+        url = os.path.join(self.base_url, "company", "profile", ticker+self.api_key).replace("\\", "/")
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
     def quote(self, tickers: List[str]) -> Union[Df, Json]:
         """Retreive quotes for any number of stock tickers."""
-        url = os.path.join(self.base_url, "quote", ",".join(tickers))
+        url = os.path.join(self.base_url, "quote", ",".join(tickers)).replace("\\", "/")+self.api_key
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
@@ -62,7 +64,7 @@ class FmpWrapper:
         if type in type_map.keys():
             query = ticker + "?period=" + period
             url = os.path.join(self.base_url, "financials",
-                               type_map[type], query)
+                               type_map[type], query).replace("\\", "/")+self.api_key
             raw_data = extract_url(url)
             def f(x: Json) -> Json: return x["financials"]
             return self.__route_return(raw_data, f)
@@ -72,7 +74,7 @@ class FmpWrapper:
 
     def price_history(self, ticker: str) -> Union[Df, Json]:
         """Retrieve daily price data."""
-        url = os.path.join(self.base_url, "historical-price-full", ticker)
+        url = os.path.join(self.base_url, "historical-price-full", ticker).replace("\\", "/")+self.api_key
         raw_data = extract_url(url)
         def f(x: Json) -> Json: return x["historical"]
         return self.__route_return(raw_data, f)
@@ -80,7 +82,7 @@ class FmpWrapper:
     def financial_ratios(self, tickers: List[str]) -> Union[Df, Json]:
         """Retrieve Financial Ratios"""
 
-        url = os.path.join(self.base_url, "financial-ratios", ",".join(tickers))
+        url = os.path.join(self.base_url, "financial-ratios", ",".join(tickers)).replace("\\", "/") + self.api_key
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
@@ -88,7 +90,7 @@ class FmpWrapper:
                          period: str = "annual") -> Union[Df, Json]:
 
         query = ticker + "?period=" + period
-        url = os.path.join(self.base_url,  "enterprise-value", ticker, query)
+        url = os.path.join(self.base_url,  "enterprise-value", query).replace("\\", "/") + '&' + self.api_key[1:]
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
@@ -96,7 +98,7 @@ class FmpWrapper:
                          period: str = "annual") -> Union[Df, Json]:
 
         query = ticker + "?period=" + period
-        url = os.path.join(self.base_url, "company-key-metrics", ticker, query)
+        url = os.path.join(self.base_url, "company-key-metrics", query).replace("\\", "/") + '&' + self.api_key[1:]
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
@@ -105,25 +107,25 @@ class FmpWrapper:
                          period: str = "annual") -> Union[Df, Json]:
 
         query = ticker + "?period=" + period
-        url = os.path.join(self.base_url, "financial-statement-growth", ticker, query)
+        url = os.path.join(self.base_url, "financial-statement-growth", query).replace("\\", "/") + '&' + self.api_key[1:]
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
     def company_ratings(self, ticker: str) -> Union[Df, Json]:
 
-        url = os.path.join(self.base_url, "company/rating", ticker)
+        url = os.path.join(self.base_url, "company/rating", ticker).replace("\\", "/")+self.api_key
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
-    def discounter_cash_flow(self, ticker: str, period: str = "annual", historical: bool = False):
+    def discounted_cash_flow(self, ticker: str, period: str = "annual", historical: bool = False):
 
-        if ~historical:
-            url = os.path.join(self.base_url, "discounted-cash-flow", ticker)
+        if not historical:
+            url = os.path.join(self.base_url, "discounted-cash-flow", ticker).replace("\\", "/")+self.api_key
             raw_data = extract_url(url)
             return self.__route_return(raw_data)
 
         query = ticker + "?period=" + period
-        url = os.path.join(self.base_url, "discounted-cash-flow", ticker, query)
+        url = os.path.join(self.base_url, "historical-discounted-cash-flow", query).replace("\\", "/") + '&' + self.api_key[1:]
         raw_data = extract_url(url)
         return self.__route_return(raw_data)
 
